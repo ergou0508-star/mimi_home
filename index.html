@@ -17,6 +17,7 @@ button,input,textarea{font:inherit}
 .app{height:100dvh;max-width:760px;margin:0 auto;display:flex;flex-direction:column;background:var(--page);padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
 .topbar{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--line);background:var(--panel)}
 .avatar{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:var(--bubble);font-size:25px;flex:none}
+  .avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}
 .identity{min-width:0;flex:1}
 .name{font-weight:700;font-size:16px;letter-spacing:.02em}
 .status{font-size:12px;color:var(--muted);margin-top:2px}
@@ -46,7 +47,9 @@ button,input,textarea{font:inherit}
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="avatar" id="headerAvatar">🐈‍⬛</div>
+    <div class="avatar" id="headerAvatar">
+  <img src="mimi2.jpg" alt="咪咪" />
+    </div>
     <div class="identity">
       <div class="name" id="headerName">咪咪</div>
       <div class="status">一只住在手机里的小猫</div>
@@ -87,7 +90,7 @@ button,input,textarea{font:inherit}
     messages = saved ? JSON.parse(saved) : starter;
   } catch(e) { messages = starter; }
   document.getElementById('headerName').textContent = settings.name;
-  document.getElementById('headerAvatar').textContent = settings.avatar;
+  document.getElementById('headerAvatar').innerHTML = '<img src="mimi2.jpg" alt="咪咪">';
 
   function save(){ try { localStorage.setItem(STORAGE_KEY, JSON.stringify(messages)); } catch(e) { showToast('浏览器暂时无法保存记录'); } }
   function showToast(text){
@@ -107,7 +110,10 @@ button,input,textarea{font:inherit}
         let row = newGroup ? document.createElement('div') : chat.lastElementChild;
         if(newGroup){
           row.className='group';
-          const avatar=document.createElement('div'); avatar.className='avatar'; avatar.textContent=settings.avatar; avatar.setAttribute('aria-hidden','true');
+          const avatar=document.createElement('div');
+avatar.className='avatar';
+avatar.innerHTML='<img src="mimi2.jpg" alt="咪咪">';
+avatar.setAttribute('aria-hidden','true');
           const list=document.createElement('div'); list.className='messages';
           row.appendChild(avatar); row.appendChild(list); chat.appendChild(row);
         }
@@ -133,8 +139,7 @@ button,input,textarea{font:inherit}
       const name=prompt('给猫猫起个名字：',settings.name);
       if(name && name.trim()){settings.name=name.trim().slice(0,24);document.getElementById('headerName').textContent=settings.name;localStorage.setItem(SETTINGS_KEY,JSON.stringify(settings));showToast('昵称改好啦！');}
     } else if(choice==='2'){
-      const avatar=prompt('输入一个 emoji 作为头像：',settings.avatar);
-      if(avatar && avatar.trim()){settings.avatar=avatar.trim().slice(0,8);document.getElementById('headerAvatar').textContent=settings.avatar;localStorage.setItem(SETTINGS_KEY,JSON.stringify(settings));render();showToast('头像换好啦！');}
+      showToast('咪咪现在使用专属图片头像啦！');
     } else if(choice==='3'){
       if(confirm('确定清空全部聊天记录吗？这个操作无法撤销。')){messages=[];save();render();showToast('聊天记录已清空。');}
     }
